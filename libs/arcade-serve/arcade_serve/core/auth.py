@@ -29,9 +29,9 @@ def validate_engine_token(worker_secret: str, token: str) -> TokenValidationResu
             audience="worker",
         )
     except jwt.InvalidSignatureError as e:
+        # SECURITY FIX: Never log the actual worker secret in logs
         logger.warning(
-            "Invalid signature. Is the Arcade Engine configured with the Worker secret '%s'?",
-            worker_secret,
+            "Invalid signature. Is the Arcade Engine configured with the correct Worker secret?"
         )
         return TokenValidationResult(valid=False, error=str(e))
 
