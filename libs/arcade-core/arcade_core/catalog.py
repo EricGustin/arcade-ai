@@ -460,7 +460,9 @@ def create_output_definition(func: Callable) -> ToolOutput:
 
     if hasattr(return_type, "__metadata__"):
         description = return_type.__metadata__[0] if return_type.__metadata__ else None  # type: ignore[assignment]
-        return_type = return_type.__origin__
+        # Only update return_type if __origin__ is not None, otherwise keep the original type
+        if return_type.__origin__ is not None:
+            return_type = return_type.__origin__
 
     # Unwrap Optional types
     # Both Optional[T] and T | None are supported
